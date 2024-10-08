@@ -1,14 +1,15 @@
-// import mongoose from 'mongoose';
+import { MongoClient } from 'mongodb';
 
-// export const connect = async (): Promise<void> => {
-//   try {
-//     await mongoose.connect(MONGO_URI, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//     });
-//     console.log('MongoDB connected');
-//   } catch (error) {
-//     console.error(error);
-//     console.log('MongoDB connection failed');
-//   }
-// };
+const mongoUrl = 'mongodb://mongo_database:27017';
+
+export async function connectToMongo() {
+  const client = new MongoClient(mongoUrl);
+  try {
+    await client.connect();
+    console.log('Connected successfully to MongoDB');
+    return client;
+  } catch (err) {
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1);
+  }
+}
