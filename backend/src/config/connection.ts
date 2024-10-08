@@ -1,15 +1,21 @@
-import { MongoClient } from 'mongodb';
+import mongoose from 'mongoose';
 
-const mongoUrl = 'mongodb://mongo_database:27017';
+// Vérifiez le nom de la base de données ici
+const mongoUrl = 'mongodb://mongo_database:27017/db';
 
 export async function connectToMongo() {
-  const client = new MongoClient(mongoUrl);
+  // Écoute les erreurs de connexion
+  mongoose.connection.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+  });
+
   try {
-    await client.connect();
-    console.log('Connected successfully to MongoDB');
-    return client;
+    await mongoose.connect(mongoUrl, {
+      serverSelectionTimeoutMS: 5000,
+    });
+    console.log('Connected successfully to MongoDB via Mongoose');
   } catch (err) {
-    console.error('Failed to connect to MongoDB', err);
+    console.error('Failed to connect to MongoDB via Mongoose', err);
     process.exit(1);
   }
 }

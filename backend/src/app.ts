@@ -3,7 +3,10 @@ import { connectToMongo } from './config/connection';
 import userRouter from './routes/user.route';
 import timerRouter from './routes/timer.route';
 import { loggerMiddleware } from './middlewares/logger.middleware';
+import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
+dotenv.config();
 const app = express();
 const port = 3001;
 
@@ -12,9 +15,9 @@ app.use(loggerMiddleware);
 
 (async () => {
   console.log('Starting application...');
-  const client = await connectToMongo();
+  await connectToMongo();
 
-  if (client) {
+  if (mongoose.connection.readyState === 1) {
     app.use('/users', userRouter);
     app.use('/timers', timerRouter);
 

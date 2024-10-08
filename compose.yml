@@ -18,10 +18,12 @@ services:
       - ./backend:/app
     depends_on:
       - db
+    env_file:
+      - ./backend/.env
 
   db:
     container_name: mongo_database
-    image: mongo
+    image: mongo:latest
     ports:
       - '27017:27017'
     volumes:
