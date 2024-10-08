@@ -5,6 +5,7 @@ import timerRouter from './routes/timer.route';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import { setupSwagger } from './config/swagger';
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,8 @@ const port = 3001;
 
 app.use(express.json());
 app.use(loggerMiddleware);
+
+setupSwagger(app);
 
 (async () => {
   console.log('Starting application...');

@@ -7,6 +7,47 @@ if (!process.env.JWT_SECRET) {
   throw new Error('JWT_SECRET is not defined');
 }
 
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Endpoints for user authentication
+ */
+
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - role
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               role:
+ *                 type: boolean
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *       400:
+ *         description: Error creating user
+ */
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password, role } = req.body;
 
@@ -36,6 +77,36 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *       400:
+ *         description: Invalid credentials
+ *       500:
+ *         description: Server error
+ */
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
