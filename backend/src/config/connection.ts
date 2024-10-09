@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
 
-// Vérifiez le nom de la base de données ici
 const mongoUrl = 'mongodb://mongo_database:27017/db';
 
 export async function connectToMongo() {
-  // Écoute les erreurs de connexion
   mongoose.connection.on('error', (err) => {
     console.error('MongoDB connection error:', err);
   });

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import userModel from '../models/user.model';
@@ -48,7 +48,11 @@ if (!process.env.JWT_SECRET) {
  *       400:
  *         description: Error creating user
  */
-export const register = async (req: Request, res: Response): Promise<void> => {
+export const register = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { name, email, password, role } = req.body;
 
   console.log('Register endpoint hit');
@@ -70,10 +74,17 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     );
     console.log('Token created:', token);
 
-    res.status(201).json({ user: newUser, token });
+    res.status(201).json({
+      message: 'User registered successfully',
+      user: newUser,
+      token,
+    });
   } catch (error) {
     console.error('Error in register:', error);
-    res.status(400).json({ message: (error as any).message });
+    res.status(400).json({
+      message: 'Failed to register user',
+      error: (error as any).message,
+    });
   }
 };
 
@@ -107,7 +118,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
  *       500:
  *         description: Server error
  */
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   const { email, password } = req.body;
 
   console.log('Login endpoint hit');
@@ -118,14 +133,16 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     if (!user) {
       console.log('Invalid credentials: user not found');
-      res.status(400).json({ message: 'Invalid credentials' });
+      res.status(400).json({ message: 'Invalid credentials: user not found' });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       console.log('Invalid credentials: password does not match');
-      res.status(400).json({ message: 'Invalid credentials' });
+      res
+        .status(400)
+        .json({ message: 'Invalid credentials: password does not match' });
       return;
     }
 
@@ -135,9 +152,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       { expiresIn: '1h' },
     );
     console.log('Login successful, token created');
-    res.json({ token });
+    res.status(200).json({
+      message: 'Login successful',
+      token,
+    });
   } catch (error) {
     console.error('Error in login:', error);
-    res.status(500).json({ message: (error as any).message });
+    res.status(500).json({
+      message: 'Failed to login user',
+      error: (error as any).message,
+    });
   }
 };

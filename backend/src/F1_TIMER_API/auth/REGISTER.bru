@@ -19,3 +19,17 @@ body:json {
   }
   
 }
+
+tests {
+  test("should be able to register", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("should receive the user object and token", function() {
+    const data = res.getBody();
+    expect(data.user).to.be.an('object');
+    expect(data.token).to.be.a('string');
+  });
+  
+}

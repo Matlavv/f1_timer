@@ -9,7 +9,7 @@ import { setupSwagger } from './config/swagger';
 
 dotenv.config();
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(loggerMiddleware);
@@ -18,21 +18,31 @@ setupSwagger(app);
 
 (async () => {
   console.log('Starting application...');
-  await connectToMongo();
+  try {
+    await connectToMongo();
 
-  if (mongoose.connection.readyState === 1) {
-    app.use('/users', userRouter);
-    app.use('/timers', timerRouter);
+    if (mongoose.connection.readyState === 1) {
+      app.use('/users', userRouter);
+      app.use('/timers', timerRouter);
 
-    app.get('/', (req, res) => {
-      res.send('Hello World!');
-    });
+      app.get('/', (req, res) => {
+        res.send('Hello World!');
+      });
 
-    app.listen(port, () => {
-      console.log(`Server is running at http://localhost:${port}`);
-    });
-  } else {
-    console.error('Failed to connect to MongoDB, exiting...');
-    process.exit(1);
+      if (process.env.NODE_ENV !== 'test') {
+        app.listen(port, () => {
+          console.log(`Server is running at http://localhost:${port}`);
+        });
+      }
+    } else {
+      throw new Error('Failed to connect to MongoDB');
+    }
+  } catch (error) {
+    console.error(error);
+    if (process.env.NODE_ENV !== 'test') {
+      process.exit(1);
+    }
   }
 })();
+
+export default app;

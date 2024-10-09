@@ -26,7 +26,10 @@ export const authMiddleware = (
     jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
       if (err) {
         console.log('Token verification failed:', err);
-        return res.status(403).json({ message: 'Forbidden' });
+        return res.status(403).json({
+          message: 'Token verification failed',
+          error: err.message,
+        });
       }
       req.user = user;
       console.log('Token verified successfully:', user);
@@ -34,6 +37,6 @@ export const authMiddleware = (
     });
   } else {
     console.log('No Authorization header');
-    res.status(401).json({ message: 'Unauthorized' });
+    res.status(401).json({ message: 'No Authorization header provided' });
   }
 };
