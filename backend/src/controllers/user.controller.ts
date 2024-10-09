@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import {
   getAllUsers as getAllUsersService,
   getUser as getUserService,
-  createUser as createUserService,
   updateUser as updateUserService,
   deleteUser as deleteUserService,
 } from '../services/user.service';
@@ -63,52 +62,6 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ message: (error as any).message });
-  }
-};
-
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - password
- *               - role
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *                 format: email
- *               password:
- *                 type: string
- *                 format: password
- *               role:
- *                 type: boolean
- *     responses:
- *       201:
- *         description: User created successfully
- *       400:
- *         description: Error creating user
- */
-export const createUser = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const newUser = await createUserService(req.body);
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(400).json({ message: (error as any).message });
   }
 };
 

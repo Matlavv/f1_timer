@@ -25,15 +25,60 @@ import {
  *         schema:
  *           type: string
  *           format: uuid
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *         description: Sort order (asc for ascending and desc for descending)
+ *       - in: query
+ *         name: minTime
+ *         schema:
+ *           type: number
+ *         description: Minimum time to filter
+ *       - in: query
+ *         name: maxTime
+ *         schema:
+ *           type: number
+ *         description: Maximum time to filter
  *     responses:
  *       200:
  *         description: A list of all timers for a user
  *       500:
  *         description: Server error
  */
-export const getAllTimers = async (req: Request, res: Response) => {
+export const getAllTimers = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const { user_id } = req.params;
+  const { sort, minTime, maxTime } = req.query;
+
   try {
-    const timers = await getAllTimersService(req.params.user_id);
+    const sortParam = sort ? sort.toString() : undefined;
+    const minTimeParam = minTime !== undefined ? Number(minTime) : undefined;
+    const maxTimeParam = maxTime !== undefined ? Number(maxTime) : undefined;
+
+    if (
+      (minTime !== undefined &&
+        minTimeParam !== undefined &&
+        isNaN(minTimeParam)) ||
+      (maxTime !== undefined &&
+        maxTimeParam !== undefined &&
+        isNaN(maxTimeParam))
+    ) {
+      res
+        .status(400)
+        .json({ message: 'minTime and maxTime must be valid numbers' });
+      return;
+    }
+
+    const timers = await getAllTimersService(
+      user_id,
+      sortParam,
+      minTimeParam,
+      maxTimeParam,
+    );
     res.status(200).json(timers);
   } catch (error) {
     res.status(500).json({ message: (error as any).message });
@@ -65,7 +110,7 @@ export const getAllTimers = async (req: Request, res: Response) => {
  *       500:
  *         description: Server error
  */
-export const getTimer = async (req: Request, res: Response) => {
+export const getTimer = async (req: Request, res: Response): Promise<void> => {
   try {
     const timer = await getTimerService(req.params.id);
     res.status(200).json(timer);
@@ -101,7 +146,10 @@ export const getTimer = async (req: Request, res: Response) => {
  *       400:
  *         description: Error creating timer
  */
-export const createTimer = async (req: Request, res: Response) => {
+export const createTimer = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const newTimer = await createTimerService(req.body);
     res.status(201).json(newTimer);

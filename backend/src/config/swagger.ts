@@ -11,7 +11,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3001',
+      url: 'http://localhost:3001', // URL du serveur
       description: 'Serveur de développement',
     },
   ],
@@ -68,6 +68,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
+  // chemins des fichiers contenant des annotations
   apis: ['./src/controllers/*.ts', './src/routes/*.ts', './src/models/*.ts'],
 };
 

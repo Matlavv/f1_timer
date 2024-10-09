@@ -35,5 +35,21 @@ This project is a full-stack application for managing F1 race timings. It includ
 
 ## API Documentation
 
+### Using the API in Bruno
+
+To test the API using Bruno, follow these steps:
+
+1. **Import the API folder:**
+
+   - Open Bruno.
+   - Click on the "Import" button.
+   - Select the `F1_TIMER_API` folder from your project directory.
+
+2. **Run the API requests:**
+
+   - Ensure the API server is running by executing `docker compose up --build`.
+   - In Bruno, navigate to the imported `F1_TIMER_API` collection.
+   - Select the desired endpoint and click "Send" to test the API.
+
 The API documentation is available via Swagger at:
 [http://localhost:3001/api-docs/](http://localhost:3001/api-docs/)
