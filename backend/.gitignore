@@ -14,6 +14,7 @@ yarn-error.log*
 # Production
 build/
 dist/
+coverage/
 
 # Dependency directories
 jspm_packages/

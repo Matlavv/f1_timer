@@ -1,8 +1,7 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import {
   getAllUsers as getAllUsersService,
   getUser as getUserService,
-  createUser as createUserService,
   updateUser as updateUserService,
   deleteUser as deleteUserService,
 } from '../services/user.service';
@@ -29,12 +28,19 @@ import {
 export const getAllUsers = async (
   req: Request,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const users = await getAllUsersService();
-    res.status(200).json(users);
+    res.status(200).json({
+      users,
+    });
   } catch (error) {
-    res.status(500).json({ message: (error as any).message });
+    console.error('Error in getAllUsers:', error);
+    res.status(500).json({
+      message: 'Failed to retrieve users',
+      error: (error as any).message,
+    });
   }
 };
 
@@ -57,58 +63,22 @@ export const getAllUsers = async (
  *       500:
  *         description: Server error
  */
-export const getUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user = await getUserService(req.params.id);
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: (error as any).message });
-  }
-};
-
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - password
- *               - role
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *                 format: email
- *               password:
- *                 type: string
- *                 format: password
- *               role:
- *                 type: boolean
- *     responses:
- *       201:
- *         description: User created successfully
- *       400:
- *         description: Error creating user
- */
-export const createUser = async (
+export const getUser = async (
   req: Request,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
-    const newUser = await createUserService(req.body);
-    res.status(201).json(newUser);
+    const user = await getUserService(req.params.id);
+    res.status(200).json({
+      user,
+    });
   } catch (error) {
-    res.status(400).json({ message: (error as any).message });
+    console.error('Error in getUser:', error);
+    res.status(500).json({
+      message: 'Failed to retrieve user',
+      error: (error as any).message,
+    });
   }
 };
 
@@ -150,12 +120,20 @@ export const createUser = async (
 export const updateUser = async (
   req: Request,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const user = await updateUserService(req.params.id, req.body);
-    res.status(200).json(user);
+    res.status(200).json({
+      message: 'User updated successfully',
+      user,
+    });
   } catch (error) {
-    res.status(500).json({ message: (error as any).message });
+    console.error('Error in updateUser:', error);
+    res.status(500).json({
+      message: 'Failed to update user',
+      error: (error as any).message,
+    });
   }
 };
 
@@ -181,11 +159,18 @@ export const updateUser = async (
 export const deleteUser = async (
   req: Request,
   res: Response,
+  next: NextFunction,
 ): Promise<void> => {
   try {
     await deleteUserService(req.params.id);
-    res.status(204).json();
+    res.status(200).json({
+      message: 'User deleted successfully',
+    });
   } catch (error) {
-    res.status(500).json({ message: (error as any).message });
+    console.error('Error in deleteUser:', error);
+    res.status(500).json({
+      message: 'Failed to delete user',
+      error: (error as any).message,
+    });
   }
 };

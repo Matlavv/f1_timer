@@ -2,7 +2,6 @@ import express from 'express';
 import {
   getUser,
   getAllUsers,
-  createUser,
   updateUser,
   deleteUser,
 } from '../controllers/user.controller';
@@ -120,26 +119,6 @@ userRouter.get('/', dbCheckMiddleware, authMiddleware, getAllUsers);
  *         description: Server error
  */
 userRouter.get('/:id', dbCheckMiddleware, authMiddleware, getUser);
-
-/**
- * @swagger
- * /users:
- *   post:
- *     summary: Create a new user
- *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/User'
- *     responses:
- *       201:
- *         description: User created successfully
- *       400:
- *         description: Error creating user
- */
-userRouter.post('/', dbCheckMiddleware, authMiddleware, createUser);
 
 /**
  * @swagger

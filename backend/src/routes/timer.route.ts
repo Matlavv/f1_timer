@@ -31,6 +31,22 @@ timerRouter.use(loggerMiddleware);
  *         schema:
  *           type: string
  *           format: uuid
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [asc, desc]
+ *         description: Sort order (asc for ascending and desc for descending)
+ *       - in: query
+ *         name: minTime
+ *         schema:
+ *           type: number
+ *         description: Minimum time to filter
+ *       - in: query
+ *         name: maxTime
+ *         schema:
+ *           type: number
+ *         description: Maximum time to filter
  *     responses:
  *       200:
  *         description: A list of all timers for a user

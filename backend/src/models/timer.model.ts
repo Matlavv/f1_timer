@@ -3,6 +3,7 @@ import mongoose, { Document, ObjectId, Schema } from 'mongoose';
 export interface ITimer extends Document {
   user_id: ObjectId;
   time: number;
+  createdAt: Date;
 }
 
 const TimerSchema: Schema = new Schema({
@@ -12,6 +13,7 @@ const TimerSchema: Schema = new Schema({
     required: true,
   },
   time: { type: Number, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 export default mongoose.model<ITimer>('Timer', TimerSchema);

@@ -1,13 +1,11 @@
 services:
-  # frontend:
-  #   container_name: frontend_timer
-  #   build: ./frontend
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - ./frontend:/app
-  #   depends_on:
-  #     - backend
+  frontend:
+    container_name: frontend_timer
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/app
 
   backend:
     container_name: backend_timer

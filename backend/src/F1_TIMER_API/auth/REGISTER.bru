@@ -6,6 +6,30 @@ meta {
 
 post {
   url: http://localhost:3001/users/register
-  body: none
+  body: json
   auth: none
+}
+
+body:json {
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "password": "securePassword",
+    "role": true
+  }
+  
+}
+
+tests {
+  test("should be able to register", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("should receive the user object and token", function() {
+    const data = res.getBody();
+    expect(data.user).to.be.an('object');
+    expect(data.token).to.be.a('string');
+  });
+  
 }
