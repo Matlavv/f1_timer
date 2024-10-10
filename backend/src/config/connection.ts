@@ -6,7 +6,6 @@ export async function connectToMongo() {
   mongoose.connection.on('error', (err) => {
     console.error('MongoDB connection error:', err);
   });
-
   try {
     await mongoose.connect(mongoUrl, {
       serverSelectionTimeoutMS: 5000,

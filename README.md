@@ -9,6 +9,7 @@ This project is a full-stack application for managing F1 race timings. It includ
 - **API**: Node.js with TypeScript running on port `3001`
 - **Database**: MongoDB running in a Docker container on port `27017`
 - **Frontend**: Next.js running on port `3000`
+- **Documenation** http://localhost:3001/api-docs/
 
 ## Getting Started
 

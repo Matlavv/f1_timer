@@ -68,7 +68,6 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  // chemins des fichiers contenant des annotations
   apis: ['./src/controllers/*.ts', './src/routes/*.ts', './src/models/*.ts'],
 };
 
