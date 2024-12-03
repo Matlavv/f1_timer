@@ -1,0 +1,23 @@
+meta {
+  name: SUBMIT TIMER
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3001/timers/submit-reaction-time
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzA1NDZmODg1NDQzM2QxMWE0MWVlYzUiLCJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwiaWF0IjoxNzI4NDY0NDE4LCJleHAiOjE3Mjg0NjgwMTh9.M0buHHZ4bY-HZy4V5WN0kcfJO6PcsPaUeHG2OPGmYzI
+}
+
+body:json {
+  {
+    "user_id": "67062f658e97118ba17afc9a",
+    "time": 1210
+  }
+  
+}

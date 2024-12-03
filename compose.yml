@@ -1,26 +1,65 @@
 services:
-  frontend:
-    container_name: frontend_timer
-    build: ./frontend
-    ports:
-      - '3000:3000'
-    volumes:
-      - ./frontend:/app
+  # frontend:
+  #   container_name: frontend_timer
+  #   build: ./frontend
+  #   ports:
+  #     - '${FRONTEND_PORT}:3000'
+  #   volumes:
+  #     - ./frontend:/app
 
-  backend:
-    container_name: backend_timer
-    build: ./backend
+  user-service:
+    container_name: user_service
+    build: ./micro_services/user_service
     ports:
-      - '3001:3001'
+      - '${USER_SERVICE_PORT}:3001'
     volumes:
-      - ./backend:/app
+      - ./micro_services/user_service:/app
     depends_on:
-      - db
+      - user-database
+    env_file:
+      - ./micro_services/user_service/.env
 
-  db:
-    container_name: mongo_database
-    image: mongo
+  timer-service:
+    container_name: timer_service
+    build: ./micro_services/timer_service
     ports:
-      - '27017:27017'
+      - '${TIMER_SERVICE_PORT}:3002'
     volumes:
-      - ./data:/data/db
+      - ./micro_services/timer_service:/app
+    depends_on:
+      - timer-database
+    env_file:
+      - ./micro_services/timer_service/.env
+
+  api-gateway:
+    container_name: api_gateway
+    build: ./micro_services/api_gateway
+    ports:
+      - '${API_GATEWAY_PORT}:3003'
+    volumes:
+      - ./micro_services/api_gateway:/app
+    depends_on:
+      - user-service
+      - timer-service
+    env_file:
+      - ./micro_services/api_gateway/.env
+
+  user-database:
+    container_name: user_database
+    image: mongo:latest
+    ports:
+      - '${USER_DATABASE_PORT}:27019'
+    volumes:
+      - user_db:/data/db
+
+  timer-database:
+    container_name: timer_database
+    image: mongo:latest
+    ports:
+      - '${TIMER_DATABASE_PORT}:27018'
+    volumes:
+      - timer_db:/data/db
+
+volumes:
+  user_db:
+  timer_db:

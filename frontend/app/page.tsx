@@ -1,7 +1,9 @@
+import Timer from './components/timer';
+
 export default function Home() {
   return (
     <div>
-      <p>coucou :p</p>
+      <Timer />
     </div>
   );
 }
